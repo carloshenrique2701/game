@@ -1,0 +1,84 @@
+Aqui está a checklist detalhada para a **geração de mapas por andar**, dividida em funcionalidades essenciais e independentes de puzzles/monstros:
+
+---
+
+### **Checklist de Desenvolvimento para Geração de Mapas**  
+**(Ordem lógica de implementação)**  
+
+#### **1. Sistema Básico de Andares**  
+- [ ] **Classe `FloorManager`**  
+  - Controla o andar atual (`current_floor: int`)  
+  - Armazena referências aos mapas carregados  
+- [ ] **Estrutura de arquivos de mapa**  
+  - Formato `.txt` ou `.json` para cada andar (ex: `floor_1.map`)  
+  - Padrão de matriz (0 = vazio, 1 = parede, 2 = escada/transição)  
+
+
+#### **2. Carregamento Dinâmico**  
+- [ ] **Método `load_floor(floor_num)`**  
+  - Lê o arquivo do mapa correspondente  
+  - Converte para matriz 2D no formato do jogo  
+- [ ] **Pré-carregamento do próximo andar**  
+  - Carrega o andar `n+1` em segundo plano ao entrar no andar `n`  
+
+
+#### **3. Transição entre Andares**  
+- [ ] **Trigger de transição**  
+  - Detecta colisão com escadas/portais (célula tipo `2` na matriz)  
+- [ ] **Efeito visual de transição**  
+  - Fade para preto (2 segundos)  
+  - Texto indicando o novo andar (ex: *"Andar 2 - Labirinto de Sombras"*)  
+
+
+#### **4. Geração de Labirintos**  
+- [ ] **Algoritmo de geração** (para mapas proceduralmente opcionais)  
+  - Implementar **Drunkard Walk** para corredores orgânicos  
+  ```python
+  def generate_drunkard_walk(width, height, steps=1000): ...
+  ```  
+- [ ] **Garantir conectividade**  
+  - Verificar se todas as áreas são acessíveis (flood fill algorithm)  
+
+
+#### **5. Renderização Otimizada**  
+- [ ] **Culling de paredes**  
+  - Não renderizar paredes fora do campo de visão do jogador  
+- [ ] **Sistema de chunks** (opcional para andares grandes)  
+  - Dividir o andar em setores (ex: 10x10 células)  
+
+
+#### **6. Salvamento de Estado**  
+- [ ] **Cache de andares visitados**  
+  - Salva a matriz de cada andar em memória após primeira visita  
+- [ ] **Posição do jogador**  
+  - Restaura coordenadas (x, y) ao voltar para um andar  
+
+
+#### **7. Debug Tools**  
+- [ ] **Visualização do mapa completo** (tecla M)  
+  - Mostra o layout atual (útil para teste)  
+- [ ] **Teleporte entre andares** (atalhos F1-F7)  
+
+---
+
+### **Cronograma Estimado (2h/dia)**  
+| Funcionalidade            | Dias (2h/dia) | Prioridade |  
+|---------------------------|---------------|------------|  
+| Sistema Básico de Andares | 2-3           | Alta       |  
+| Carregamento Dinâmico     | 3             | Alta       |  
+| Transição entre Andares   | 2             | Alta       |  
+| Geração de Labirintos     | 4-5           | Média      |  
+| Renderização Otimizada    | 3             | Baixa*     |  
+| Salvamento de Estado      | 2             | Média      |  
+| Debug Tools               | 1             | Baixa      |  
+
+> *Prioridade baixa se os andares forem pequenos (< 50x50 células)
+
+---
+
+### **Próximos Passos Recomendados**  
+1. Comece pela **estrutura de arquivos de mapa** (item 1.2)  
+2. Implemente **`load_floor()`** (item 2.1) com um andar de teste  
+3. Adicione **transição básica** (item 3) sem efeitos visuais  
+
+Quer que eu detalhe alguma funcionalidade específica ou gere snippets para iniciar?
