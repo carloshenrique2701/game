@@ -1,9 +1,10 @@
-#arquivo que vamos implementar a arma do player
-
 from sprite_object import *
 
 
 class Weapon(AnimatedSprite):
+
+	# Inicializa um objeto Weapon com valores padrão para o caminho da imagem, escala e tempo de animação. 
+	# Ele também configura a posição da arma, o estado de recarregamento e o valor de dano.
 	def __init__(self, game, path='resources/sprites/weapon/0.png',scale=0.4, animation_time=90):
 		super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
 		self.images = deque(
@@ -16,7 +17,7 @@ class Weapon(AnimatedSprite):
 		self.frame_counter = 0 
 		self.damage = 50 #dano
 
-
+	#Anima o tiro da arma rodando por uma sequência de imagens e atualizando o estado de recarregamento.
 	def animate_shot(self):
 		if self.reloading:
 			self.game.player.shot = False 

@@ -12,6 +12,13 @@ Aqui está a checklist detalhada para a **geração de mapas por andar**, dividi
 - [ ] **Estrutura de arquivos de mapa**  
   - Formato `.txt` ou `.json` para cada andar (ex: `floor_1.map`)  
   - Padrão de matriz (0 = vazio, 1 = parede, 2 = escada/transição)  
+                
+
+                @@@@@@@
+                
+                  
+
+                @@@@@@@
 
 
 #### **2. Carregamento Dinâmico**  

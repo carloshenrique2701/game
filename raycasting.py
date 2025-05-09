@@ -2,19 +2,19 @@ import pygame as pg  #veremos essa parte
 import math 
 from settings import * 
 
-#mapeando percepção do player no mapa
+#mapeando percepção do player no mapa para uma renderização 3d
 
 class RayCasting:
 	def __init__(self, game):
 		self.game = game 
-
-		#aula4
+		
+		#configura algumas variáveis internas
 		self.ray_casting_result = []
 		self.objects_to_render = []
 		self.textures = self.game.object_renderer.wall_textures
 
 
-	
+	#Pega o ray_casting_result e gera uma lista de objetos para renderizar, incluindo sua profundidade, textura e posição.
 	def get_objects_to_render(self):
 		self.objects_to_render = []
 		for ray, values in enumerate(self.ray_casting_result):
@@ -40,7 +40,8 @@ class RayCasting:
 			self.objects_to_render.append((depth, wall_column, wall_pos))
 
 
-
+	# Realiza o lançamento de raios propriamente dito, que envolve lançar raios a partir da posição do jogador 
+	# e determinar quais objetos estão visíveis. Ele atualiza a lista ray_casting_result com os resultados.
 	def ray_cast(self):
 		
 		self.ray_casting_result = []
@@ -104,23 +105,11 @@ class RayCasting:
 				x_hor %= 1 
 				offset = (1 - x_hor) if sin_a > 0 else x_hor
 
-			#remove fishbowl effect // remover efeito aquário - parte 3 
+			#remove fishbowl effect // remover efeito aquário 
 			depth *= math.cos(self.game.player.angle - ray_angle)
 
-			#desenho para indicar o mapeamento do player no mapa
-			"""pg.draw.line(self.game.screen, 'yellow', (100 * ox, 100 * oy),
-				(100 * ox + 100 * depth * cos_a, 100 * oy + 100 * depth * sin_a), 2)"""
-
 			#projection / projeção
-			proj_height = screen_dist / (depth + 0.0001) #parte 3
-
-
-			#draw walls / desenhar paredes 
-			#** exponenciação
-			"""color = [255 / (1 + depth ** 5 * 0.00002)] * 3 #cor responsável pelo escurecimento das paredes
-			pg.draw.rect(self.game.screen, color,
-				(ray * scale, half_height - proj_height // 2, scale, proj_height))"""
-
+			proj_height = screen_dist / (depth + 0.0001) 
 
 			self.ray_casting_result.append((depth, proj_height, texture, offset))
 

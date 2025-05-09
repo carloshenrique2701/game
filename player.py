@@ -23,30 +23,26 @@ class Player:
 		self.time_prev = pg.time.get_ticks()
 	
 
+	"""
+	Gerenciamento de Saúde
 
+	recover_health: Recupera a saúde do jogador em 1 ponto se o atraso de recuperação de saúde tiver passado e a saúde do jogador for menor que a máxima.
+	
+	check_health_recovery_delay: Verifica se o atraso de recuperação de saúde tiver passado e retorna True se tiver.
+	
+	get_damage: Reduz a saúde do jogador por uma quantidade especificada e reproduz um efeito sonoro.
+	"""
 	#
 	def recover_health(self):
 		if self.check_health_recovery_delay() and self.health < player_max_health:
 			self.health += 1 
-
 	#
 	def check_health_recovery_delay(self):
 		time_now = pg.time.get_ticks()
 		if time_now - self.time_prev > self.health_recovery_delay:
 			self.time_prev = time_now
 			return True 
-
-
 	# 
-	def check_game_over(self):
-		if self.health < 1:
-			self.game.object_renderer.game_over()
-			pg.display.flip()
-			pg.time.delay(1500)
-			self.game.new_game()
-
-
-	# explicar
 	def get_damage(self, damage):
 		#reduz a vida do player ao sofrer dano do inimigo
 		self.health -= damage
@@ -56,6 +52,14 @@ class Player:
 		#
 		self.check_game_over()
 
+	# Verifica se a saúde do jogador é menor que 1 e termina o jogo se for.
+	def check_game_over(self):
+		if self.health < 1:
+			self.game.object_renderer.game_over()
+			pg.display.flip()
+			pg.time.delay(1500)
+			self.game.new_game()
+
 	#verifica se o player pressionou o mouse para atirar
 	def single_fire_event(self, event):
 		if event.type == pg.MOUSEBUTTONDOWN:
@@ -64,7 +68,16 @@ class Player:
 				self.shot = True 
 				self.game.weapon.reloading = True
 
+	"""
+	Movimento
 
+	movement: Atualiza a posição do jogador com base na entrada do teclado e verifica colisões com paredes.
+
+	check_wall: Verifica se uma posição dada é uma parede no mapa.
+
+	check_wall_collision: Verifica colisões com paredes e atualiza a posição do jogador conforme necessário.
+	"""
+	#
 	def movement(self):
 		#movimento do player
 		sin_a = math.sin(self.angle)
@@ -95,28 +108,15 @@ class Player:
 
 		#função que checa a colisão com as paredes do game
 		self.check_wall_collision(dx, dy)
-
-		""" parte 4
-		#quando a tecla seta para esquerda pressionada, movimenta a mira do player
-		if keys[pg.K_LEFT]:
-			self.angle -= player_rot_speed * self.game.delta_time
-
-		#quando a tecla seta para esquerda pressionada, movimenta a mira do player
-		if keys[pg.K_RIGHT]:
-			self.angle += player_rot_speed * self.game.delta_time
-		"""
 		self.angle %= math.tau
-		
-
-	#checa onde o player está no mapa
+	#	
 	def check_wall(self, x, y):
 		return (x, y) not in self.game.map.world_map
-
-	#define a colisão do player com as paredes
+	#
 	def check_wall_collision(self, dx, dy):
-		#parte 4
+
 		scale = player_size_scale / self.game.delta_time
-		#parte 4
+
 		if self.check_wall(int(self.x + dx * scale), int(self.y)):
 			self.x += dx 
 		if self.check_wall(int(self.x), int(self.y + dy * scale)):
@@ -132,7 +132,7 @@ class Player:
 		pg.draw.circle(self.game.screen, 'green', (self.x * 100, self.y * 100), 15)
 
 
-	#parte 4
+	#Atualiza o ângulo do jogador com base no movimento do mouse.
 	def mouse_control(self):
 
 		if self.game.paused:  # Só centraliza se o jogo não estiver pausado
@@ -149,16 +149,14 @@ class Player:
 	def update(self):
 		self.movement()
 		self.mouse_control()
-		#
 		self.recover_health()
 
-
-	@property
+	#Retorna a posição atual do player
+	@property 
 	def pos(self):
-		#posição atual do player
 		return self.x, self.y 
 
-
+	#Retorna a posição do jogador no mapa.
 	@property
 	def map_pos(self):
 		return int(self.x), int(self.y)
