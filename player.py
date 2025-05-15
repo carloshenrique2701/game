@@ -16,12 +16,12 @@ class Player:
 
 		#vida do player - 
 		self.health = player_max_health 
-
-		#
-		self.rel = 0
 		self.health_recovery_delay = 700 
-		self.time_prev = pg.time.get_ticks()
+		self.time_prev = pg.time.get_ticks() #usado para calcular o atraso de recuperação de saúde
 	
+		#movimento do mouse
+		self.rel = 0
+		self.pitch = 0
 
 	"""
 	Gerenciamento de Saúde
@@ -88,6 +88,7 @@ class Player:
 		speed_cos = speed * cos_a 
 
 		#obtém e armazena todas as teclas pressionadas no game
+		#dx e dy representam o deslocamento do player no mapa olhando de cima
 		keys = pg.key.get_pressed()
 		if keys[pg.K_w]:
 			#vai para cima
@@ -108,7 +109,7 @@ class Player:
 
 		#função que checa a colisão com as paredes do game
 		self.check_wall_collision(dx, dy)
-		self.angle %= math.tau
+		self.angle %= math.tau #o angulo fica entre 0 e 2pi, evitando erros de arredondamento(overflow)
 	#	
 	def check_wall(self, x, y):
 		return (x, y) not in self.game.map.world_map
@@ -122,16 +123,6 @@ class Player:
 		if self.check_wall(int(self.x), int(self.y + dy * scale)):
 			self.y += dy
 
-	#desenha no mapa a linha do player
-	def draw(self):
-		
-		pg.draw.line(self.game.screen, 'yellow', (self.x * 100, self.y * 100), 
-			(self.x * 100 + width * math.cos(self.angle),
-			self.y * 100 + width * math.sin(self.angle)), 2)
-		#desenha um círculo que representa o jogador
-		pg.draw.circle(self.game.screen, 'green', (self.x * 100, self.y * 100), 15)
-
-
 	#Atualiza o ângulo do jogador com base no movimento do mouse.
 	def mouse_control(self):
 
@@ -140,8 +131,15 @@ class Player:
 			return
 
 		if not self.game.paused:  # Só move a câmera se o jogo não estiver pausado
-			self.rel = pg.mouse.get_rel()[0]
+			mx, my = pg.mouse.get_rel()
+
+			#movimento horizontal
+			self.rel = mx
 			self.angle += self.rel * mouse_sensitivity * self.game.delta_time
+
+			#movimento vertical
+			self.pitch -= my * mouse_sensitivity * self.game.delta_time
+			self.pitch = max(-max_pitch, min(max_pitch, self.pitch)) #limitando a visão
 
 
 

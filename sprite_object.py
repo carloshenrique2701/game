@@ -38,7 +38,9 @@ class SpriteObject:
 
 		self.sprite_half_width = proj_width // 2 
 		height_shift = proj_height * self.sprite_height_shift
-		pos = self.screen_x - self.sprite_half_width, half_height - proj_height // 2 + height_shift
+
+		pitch_offset = int(self.player.pitch * screen_dist)
+		pos = self.screen_x - self.sprite_half_width, half_height - proj_height // 2 + height_shift + pitch_offset
 
 		self.game.raycasting.objects_to_render.append((self.norm_dist, image, pos))
 

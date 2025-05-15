@@ -72,6 +72,7 @@ class MainMenu:
     #valida qual opção foi selecionada
     def select_option(self):
         if self.selected == 0:  # Iniciar Jogo
+            pg.mouse.get_rel()
             self.game.start_game()
         else:  # Sair
             pg.quit()

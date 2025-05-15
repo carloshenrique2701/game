@@ -67,6 +67,7 @@ class Map:
 		self.game = game 
 		self.mini_map = mini_map
 		self.world_map = {}
+		self.floor_map = {}
 		self.get_map()
 
 
