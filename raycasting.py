@@ -15,10 +15,17 @@ class RayCasting:
         for ray, values in enumerate(self.ray_casting_result):
             depth, proj_height, texture, offset = values
 
+            visibility = max(0.1, 1 - depth/max_depth)
+
             if proj_height < height:
                 wall_column = self.textures[texture].subsurface(
                     offset * (texture_size - scale), 0, scale, texture_size
                 )
+
+                darken = pg.Surface((scale, proj_height), pg.SRCALPHA)
+                darken.fill((0, 0, 0, int((1 - visibility) * 150)))
+                wall_column.blit(darken, (0, 0), special_flags=pg.BLEND_RGBA_MULT)
+
                 wall_column = pg.transform.scale(wall_column, (scale, proj_height))
                 wall_pos = (ray * scale, half_height - proj_height // 2)
             else:

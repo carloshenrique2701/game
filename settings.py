@@ -4,7 +4,7 @@ import math
 
 #resolução da tela e frames/segundo
 res = width, height = 1300, 700
-fps = 120
+fps = 30
 half_width, half_height = width // 2, height // 2 #pega o inteiro da divisão
 
 #configurações do player e movimentação geral
@@ -31,7 +31,7 @@ delta_angle = fov / num_rays #angulo de visão dividido pela quantidade de raios
 max_depth = 50 #alcance dos raios para as colisões(para que as paredes carreguem adequadamente)
 
 #cor do chao, cinza esbelto
-floor_color = (150, 150, 150)
+floor_color = (40, 39, 24)
 
 ##Para calculos da projeção 3d
 screen_dist = half_width / math.tan(half_fov) #tangente inversa da metade do angulo de visão para a metade da distância de tela(basicamente, serve para calcular coordenadas da projecao em relação ao player)

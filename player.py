@@ -23,6 +23,20 @@ class Player:
 		self.rel = 0
 		self.pitch = 0
 
+		#Lanterna
+		self.light_intensity = 10.0
+		self.light_radius = 200
+
+	def update_light(self):
+		# Apenas atualiza se houver alteração significativa
+		old_radius = self.light_radius
+		self.light_intensity = max(0.3, self.light_intensity - 0.0001)
+		new_radius = int(self.light_radius * self.light_intensity)
+
+		if abs(new_radius - old_radius) > 1 or self.game.player.rel != 0:
+			self.light_radius = new_radius
+			self.game.object_renderer.light_mask = self.game.object_renderer.create_light_mask()
+
 	"""
 	Gerenciamento de Saúde
 
@@ -144,6 +158,8 @@ class Player:
 		self.movement()
 		self.mouse_control()
 		self.recover_health()
+		self.update_light()
+		print(self.x, self.y)
 
 	#Retorna a posição atual do player
 	@property 

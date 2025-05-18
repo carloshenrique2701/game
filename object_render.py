@@ -23,10 +23,49 @@ class ObjectRenderer:
 		self.digits = dict(zip(map(str, range(11)), self.digit_images))
 		self.game_over_image = self.get_texture('resources/textures/game_over.png', res)
 
+		#Lanterna
+		self.darkness = pg.Surface((width, height), pg.SRCALPHA)
+		self.darkness.fill((0, 0, 0, 180))
+		self.light_mask = self.create_light_mask()
+
+	def create_light_mask(self):
+		mask = pg.Surface((width, height), pg.SRCALPHA)
+		radius = self.game.player.light_radius
+
+		# Cálculo da posição da luz com base no ângulo do jogador
+		angle = self.game.player.angle
+		offset_distance = radius * 0.5  # distância da lanterna à frente do jogador
+
+		center_x = int(width // 2 + offset_distance * math.cos(angle))
+		center_y = int(height // 2 + offset_distance * math.sin(angle) * 0.5)  # vertical mais suave
+
+		for y in range(height):
+			for x in range(width):
+				dist = math.sqrt((x - center_x) ** 2 + (y - center_y) ** 2)
+				if dist <= radius:
+					alpha = int(255 * (1 - dist / radius))
+					mask.set_at((x, y), (255, 255, 255, alpha))
+
+		return mask
+
+
 	def draw(self):
 		self.draw_background()
 		self.render_game_objects()
 		self.draw_player_health()
+		
+		# Depois aplica a escuridão com a lanterna
+		if not self.light_mask:
+			self.create_light_mask()
+		
+		# Cria uma cópia da escuridão
+		final_darkness = self.darkness.copy()
+		
+		# Aplica a máscara de luz
+		final_darkness.blit(self.light_mask, (0, 0), special_flags=pg.BLEND_MULT)
+		
+		# Desenha a escuridão final
+		self.game.screen.blit(final_darkness, (0, 0))
 
 	def game_over(self):
 		self.screen.blit(self.game_over_image, (0, 0)) #coloca a imagem de game over na tela 
@@ -74,6 +113,24 @@ class ObjectRenderer:
 			key=lambda t: t[0], reverse=True)
 		for depth, image, pos in list_objects:
 			self.screen.blit(image, pos)
+
+	def create_light_mask(self):
+		# Cria um gradiente circular para a lanterna
+		mask = pg.Surface((width, height))
+		mask.fill((0, 0, 0))
+		
+		# Desenha um círculo de luz no centro
+		center_x, center_y = width // 2, height // 2
+		radius = 200  # Alcance da lanterna
+		
+		for y in range(center_y - radius, center_y + radius):
+			for x in range(center_x - radius, center_x + radius):
+				dist = math.sqrt((x - center_x)**2 + (y - center_y)**2)
+				if dist <= radius:
+					alpha = min(255, int(255 * (1 - dist/radius)))
+					mask.set_at((x, y), (255, 255, 255, alpha))
+		
+		self.light_mask = mask
 
 
 	@staticmethod #Metodo estatic para nao precisar instanciar a classe
