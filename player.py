@@ -137,10 +137,6 @@ class Player:
 			self.rel = mx
 			self.angle += self.rel * mouse_sensitivity * self.game.delta_time
 
-			#movimento vertical
-			self.pitch -= my * mouse_sensitivity * self.game.delta_time
-			self.pitch = max(-max_pitch, min(max_pitch, self.pitch)) #limitando a visão
-
 
 
 	#atualiza o movimento do player constantemente para que ele consiga andar

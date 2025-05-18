@@ -8,7 +8,7 @@ fps = 120
 half_width, half_height = width // 2, height // 2 #pega o inteiro da divisão
 
 #configurações do player e movimentação geral
-player_pos = 44, 49 #Posição inicial do player
+player_pos = 2, 2 #Posição inicial do player
 player_angle = 0 #angulo inicial
 player_speed = 0.003 
 player_rot_speed = 0.002 #velocidade de rotação
@@ -29,9 +29,6 @@ num_rays = width // 2 #quantidade de raios que serão projetados, pegando o inte
 half_num_rays = num_rays // 2 
 delta_angle = fov / num_rays #angulo de visão dividido pela quantidade de raios (delta), para que os raios sejam equidistantes
 max_depth = 50 #alcance dos raios para as colisões(para que as paredes carreguem adequadamente)
-vertical_fov = 0 # Campo de visão vertical (45 graus)
-vertical_sensitivity = mouse_sensitivity  # Sensibilidade do mouse vertical
-max_pitch = math.pi / 3  # Ângulo máximo para cima/baixo (60 graus)
 
 #cor do chao, cinza esbelto
 floor_color = (150, 150, 150)

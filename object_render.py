@@ -52,17 +52,11 @@ class ObjectRenderer:
 
 
 	def draw_background(self):
-		#Usando o modulo para fazer o efeito de movimento do ceu
-		pitch_offset = int(self.game.player.pitch * screen_dist)
-		sky_y_offset = int(self.game.player.pitch * screen_dist)  # mesmo valor usado para o chão
+		self.sky_offset = (self.sky_offset + 4.5 * self.game.player.rel) % width
+		self.screen.blit(self.sky_image, (-self.sky_offset, 0))
+		self.screen.blit(self.sky_image, (-self.sky_offset + width, 0))
+		pg.draw.rect(self.screen, floor_color, (0, half_height, width, height))
 
-		self.sky_offset = int(self.game.player.angle * width) % width
-		self.screen.blit(self.sky_image, (-self.sky_offset, sky_y_offset))
-		self.screen.blit(self.sky_image, (-self.sky_offset + width, sky_y_offset))
-
-		floor_start = half_height + pitch_offset
-		if floor_start < height:
-			pg.draw.rect(self.screen, floor_color, (0, floor_start, width, height - floor_start)) #Desenha o floor 
 
 	"""
 	1- Ordenação dos objetos: A função sorted() é usada para ordenar a lista de objetos a serem renderizados (self.game.raycasting.objects_to_render) com base na profundidade (depth) 
